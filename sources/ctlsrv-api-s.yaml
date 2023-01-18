@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ctlsrv-api
+  namespace: ctlsrv
+  annotations:
+    prometheus.io/scrape: 'true'
+  labels:
+    app: ctlsrv-api
+    tier: api
+spec:
+  ports:
+  - port: 8080
+    targetPort: ctlsrv-http-api
+  selector:
+    app: ctlsrv-api
+    tier: api

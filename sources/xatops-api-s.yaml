@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: xatops-api
+  namespace: xatops
+  annotations:
+    prometheus.io/scrape: 'true'
+  labels:
+    app: xatops-api
+    tier: api
+spec:
+  ports:
+  - port: 8080
+    targetPort: xatops-http-api
+  selector:
+    app: xatops-api
+    tier: api

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xatops-api
+  namespace: xatops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xatops-api
+      tier: api
+  template:
+    metadata:
+      labels:
+        app: xatops-api
+        tier: api
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - mesh-saas
+      containers:
+      - name: xatops-api
+        image: "docker.io/sylosis91/engineering-custom-api:1.0.0"
+        env:
+          - name: "PORT"
+            value: "8080"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 200m
+            memory: 200Mi
+        ports:
+        - containerPort: 8080
+          name: xatops-http-api
