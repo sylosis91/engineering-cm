@@ -126,6 +126,13 @@ Define the ValidationWebhookConfiguration's name
 {{- end -}}
 
 {{/*
+Define the chaos mesh namespace (NOT CLUSTER SCOPE)
+*/}}
+{{- define "chaos-mesh.namespace" -}}
+{{- printf .Release.Namespace -}}
+{{- end -}}
+
+{{/*
 Define the webhook's name
 */}}
 {{- define "chaos-mesh.webhook" -}}
