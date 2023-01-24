@@ -24,7 +24,7 @@ customLabels: {}
 
 # clusterScoped is whether chaos-mesh should manage kubernetes cluster wide chaos
 # Also see rbac.create and controllerManager.serviceAccount
-clusterScoped: true
+clusterScoped: false
 
 # Creating rbac API Objects. Also see clusterScoped and controllerManager.serviceAccount
 rbac:
@@ -89,7 +89,7 @@ controllerManager:
   enableFilterNamespace: false
   # targetNamespace only works with clusterScoped is false(namespace scoped mode).
   # It means namespace which will be injected chaos
-  targetNamespace: { .values.chaos-mesh.namespace . }
+  targetNamespace: xatops
 
   service:
     # Kubernetes Service type for service chaos-controller-manager
