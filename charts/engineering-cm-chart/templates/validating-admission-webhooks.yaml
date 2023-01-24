@@ -27,6 +27,7 @@
 apiVersion: {{ $webhookApiVersion }}
 kind: ValidatingWebhookConfiguration
 metadata:
+  namespace: {{ $.Release.Namespace | quote }}
   name: {{ template "chaos-mesh.validation" . }}
   labels:
     {{- include "chaos-mesh.labels" . | nindent 4 }}

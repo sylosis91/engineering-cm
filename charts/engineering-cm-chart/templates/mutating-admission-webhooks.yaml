@@ -27,6 +27,7 @@
 apiVersion: {{ $webhookApiVersion }}
 kind: MutatingWebhookConfiguration
 metadata:
+  namespace: {{ $.Release.Namespace | quote }}
   name: {{ template "chaos-mesh.mutation" . }}
   labels:
     {{- include "chaos-mesh.labels" . | nindent 4 }}
