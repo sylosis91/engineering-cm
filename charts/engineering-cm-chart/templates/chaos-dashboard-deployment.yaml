@@ -74,7 +74,7 @@ spec:
             - name: CLUSTER_SCOPED
               value: "{{ .Values.clusterScoped }}"
             - name: TARGET_NAMESPACE
-              value: {{ .Values.controllerManager.targetNamespace | quote }}
+              value: {{ .Release.Namespace | quote }}
             - name: ENABLE_FILTER_NAMESPACE
               value: "{{ .Values.controllerManager.enableFilterNamespace }}"
             - name: SECURITY_MODE
