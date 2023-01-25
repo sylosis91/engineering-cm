@@ -50,9 +50,6 @@ spec:
       {{- if  .Values.controllerManager.priorityClassName }}
       priorityClassName: {{ .Values.controllerManager.priorityClassName }}
       {{- end }}
-      {{- if .Values.chaosDlv.enable }}
-      shareProcessNamespace: true
-      {{- end }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets: {{ toYaml .Values.imagePullSecrets | nindent 8 }}
       {{- end }}
@@ -86,8 +83,6 @@ spec:
             value: {{ .Values.timezone | default "UTC" }}
           - name: CHAOS_DAEMON_SERVICE_PORT
             value: !!str {{ .Values.chaosDaemon.grpcPort }}
-          - name: BPFKI_PORT
-            value: !!str {{ .Values.bpfki.grpcPort }}
           - name: ENABLED_CONTROLLERS
             value: {{ .Values.controllerManager.enabledControllers | join "," | quote }}
           - name: ENABLED_WEBHOOKS
@@ -106,10 +101,6 @@ spec:
           - name: CTRL_ADDR
             value: ":10082"
           {{- end }}
-          - name: CHAOS_DNS_SERVICE_NAME
-            value: {{ .Values.dnsServer.name }}
-          - name: CHAOS_DNS_SERVICE_PORT
-            value: !!str {{ .Values.dnsServer.grpcPort }}
           - name: SECURITY_MODE
             value: {{ .Values.dashboard.securityMode | quote }}
           - name: CHAOSD_SECURITY_MODE
@@ -173,21 +164,6 @@ spec:
           - name: ctrl
             containerPort: 10082
         {{- end }}
-      {{- if .Values.chaosDlv.enable }}
-      - name: chaos-mesh-dlv
-        image: {{template "chaos-dlv.image" . }}
-        imagePullPolicy: {{ .Values.chaosDlv.imagePullPolicy | default "IfNotPresent" }}
-        env:
-          - name: CMD_NAME
-            value: chaos-controller-manager
-        securityContext:
-          capabilities:
-            add:
-            - SYS_PTRACE
-        ports:
-        - name: dlv
-          containerPort: 8000
-      {{- end }}
       volumes:
         - name: webhook-certs
           secret:

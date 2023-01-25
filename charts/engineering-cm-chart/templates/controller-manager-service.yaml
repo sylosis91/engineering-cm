@@ -42,12 +42,6 @@ spec:
       protocol: TCP
       name: ctrl
   {{- end }}
-  {{- if .Values.chaosDlv.enable }}
-    - port: 8000
-      targetPort: dlv
-      protocol: TCP
-      name: dlv
-  {{- end }}
     - port: {{ .Values.controllerManager.env.METRICS_PORT }}
       targetPort: http
       protocol: TCP

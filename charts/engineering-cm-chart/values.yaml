@@ -86,10 +86,12 @@ controllerManager:
     # METRICS_PORT is configured the port for chaos-controller-manager exposing prometheus metrics
     METRICS_PORT: 10080
   # If enabled, only pods in the namespace annotated with `"chaos-mesh.org/inject": "enabled"` could be injected
+  # A revisar activando este valor !!!!!
   enableFilterNamespace: false
   # targetNamespace only works with clusterScoped is false(namespace scoped mode).
   # It means namespace which will be injected chaos
-  targetNamespace: ctlsrv
+  # Actualmente no usamos esta variable, ya lo tenemos definido en el template
+  # targetNamespace: ctlsrvasdfasdf
 
   service:
     # Kubernetes Service type for service chaos-controller-manager
@@ -124,6 +126,7 @@ controllerManager:
     podFailure:
       # Custom Pause Container Image for Pod Failure Chaos
       pauseImage: gcr.io/google-containers/pause:latest
+      # revisar de pushear a los artifacts
   leaderElection:
     # Enable leader election for controller manager.
     enabled: true
@@ -176,6 +179,7 @@ chaosDaemon:
   ##     # CAP_IPC_LOCK is used to lock memory
   ##     - IPC_LOCK
   privileged: true
+  # a revisar este tema, es posible que tengamos que hacerlo sin permisos ya que los pods se arrancan con usuario de aplicación 
   # Custom priorityClassName for using pod priorities
   priorityClassName: ""
   # Pod annotations of chaos-daemon
@@ -388,88 +392,6 @@ dashboard:
     # Defines which ingress controller will implement the resource
     ingressClassName: ""
 
-dnsServer:
-  # Enable DNS Server which required by DNSChaos
-  create: false
-  # Name of serviceaccount for chaos-dns-server.
-  serviceAccount: chaos-dns-server
-  # Image of DNS Server
-  image: pingcap/coredns:v0.2.1
-  # Image pull policy
-  imagePullPolicy: IfNotPresent
-  # Customized priorityClassName for chaos-dns-server
-  priorityClassName: ""
-  # Node labels for chaos-dns-server pod assignment
-  nodeSelector: {}
-  # Toleration labels for chaos-dns-server pod assignment
-  tolerations: []
-  # Pod annotations of chaos-dns-server
-  podAnnotations: {}
-  # the service name of chaos-dns-server
-  name: chaos-mesh-dns-server
-  # grpc port for chaos-dns-server
-  grpcPort: 9288
-  # Number of replicas
-  replicas: 1
-  # CPU/Memory resource requests/limits for chaos-dns-server pod
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits: {}
-    #  cpu: 500m
-    #  memory: 1024Mi
-    requests:
-      cpu: 100m
-      memory: 70Mi
-  env:
-    # The address of chaos-dns-server listen on
-    LISTEN_HOST: "0.0.0.0"
-    # The port of chaos-dns-server listen on
-    LISTEN_PORT: 53
-
-prometheus:
-  # Enable prometheus
-  create: false
-  # The serviceAccount for prometheus
-  serviceAccount: prometheus
-  # Docker image for prometheus
-  image: prom/prometheus:v2.18.1
-  # Image pull policy
-  imagePullPolicy: IfNotPresent
-  # Custom priorityClassName for using pod priorities
-  priorityClassName: ""
-  # Node labels for prometheus pod assignment
-  nodeSelector: {}
-  # Toleration labels for prometheus pod assignment
-  tolerations: []
-  # Map of prometheus node/pod affinities
-  affinity: {}
-  # Deployment prometheus annotations
-  podAnnotations: {}
-  #  CPU/Memory resource requests/limits for prometheus pod
-  resources:
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    limits:
-      cpu: 500m
-      memory: 1024Mi
-    requests:
-      cpu: 250m
-      memory: 512Mi
-  # Kubernetes Service type
-  service:
-    type: ClusterIP
-
-  volume:
-    # storage size of PVC
-    storage: 2Gi
-    # storage class of PVC
-    storageClassName: standard
-
 webhook:
   certManager:
     # Setup the webhook using cert-manager
@@ -494,12 +416,7 @@ webhook:
     - iochaos
     - timechaos
     - networkchaos
-    - kernelchaos
     - stresschaos
-    - awschaos
-    - azurechaos
-    - gcpchaos
-    - dnschaos
     - jvmchaos
     - schedule
     - workflow
@@ -509,42 +426,8 @@ webhook:
     - physicalmachine
     - statuscheck
     - remotecluster
-
-bpfki:
-  # Enable chaos-kernel
-  create: false
-  # image would be constructed by <registry>/<repository>:<tag>
-  image:
-    # empty registry means using the global images.registry
-    registry: ""
-    repository: chaos-mesh/chaos-kernel
-    # empty tag means using the global images.tag
-    tag: ""
-  # Image pull policy
-  imagePullPolicy: IfNotPresent
-  # The port which grpc server listens on
-  grpcPort: 50051
-  # CPU/Memory resource requests/limits for chaos-kernel container
-  resources:
-    {}
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-    # limits:
-    #  cpu: 500m
-    #  memory: 1024Mi
-    # requests:
-    #  cpu: 250m
-    #  memory: 512Mi
-
-chaosDlv:
-  enable: false
-  # image would be constructed by <registry>/<repository>:<tag>
-  image:
-    # empty registry means using the global images.registry
-    registry: ""
-    repository: chaos-mesh/chaos-dlv
-    # empty tag means using the global images.tag
-    tag: ""
-  imagePullPolicy: IfNotPresent
+      #- awschaos
+      #- azurechaos
+      #- gcpchaos
+      #- dnschaos
+      #- kernelchaos

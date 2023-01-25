@@ -49,9 +49,6 @@ spec:
       {{- if .Values.dashboard.priorityClassName }}
       priorityClassName: {{ .Values.dashboard.priorityClassName }}
       {{- end }}
-      {{- if .Values.chaosDlv.enable }}
-      shareProcessNamespace: true
-      {{- end }}
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets: {{ toYaml .Values.imagePullSecrets | nindent 8 }}
       {{- end }}
@@ -85,8 +82,6 @@ spec:
               value: "{{ .Values.dashboard.gcpClientId }}"
             - name: GCP_CLIENT_SECRET
               value: "{{ .Values.dashboard.gcpClientSecret }}"
-            - name: DNS_SERVER_CREATE
-              value: "{{ .Values.dnsServer.create }}"
             - name: ROOT_URL
               value: "{{ .Values.dashboard.rootUrl }}"
             - name: ENABLE_PROFILING
@@ -100,21 +95,6 @@ spec:
               containerPort: {{ .Values.dashboard.env.LISTEN_PORT }}
             - name: metric
               containerPort: {{ .Values.dashboard.env.METRIC_PORT }}
-        {{- if .Values.chaosDlv.enable }}
-        - name: chaos-mesh-dlv
-          image: {{template "chaos-dlv.image" . }}
-          imagePullPolicy: {{ .Values.chaosDlv.imagePullPolicy | default "IfNotPresent" }}
-          env:
-            - name: CMD_NAME
-              value: chaos-dashboard
-          securityContext:
-            capabilities:
-              add:
-              - SYS_PTRACE
-          ports:
-          - name: dlv
-            containerPort: 8000
-        {{- end }}
         {{- with .Values.dashboard.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
@@ -170,12 +150,6 @@ spec:
 {{- if and .Values.dashboard.service.nodePort (eq .Values.dashboard.service.type "NodePort") }}
       nodePort: {{ .Values.dashboard.service.nodePort }}
 {{- end }}
-  {{- if .Values.chaosDlv.enable }}
-    - port: 8000
-      targetPort: dlv
-      protocol: TCP
-      name: dlv
-  {{- end }}
     - protocol: TCP
       port: {{ .Values.dashboard.env.METRIC_PORT }}
       targetPort: {{ .Values.dashboard.env.METRIC_PORT }}
