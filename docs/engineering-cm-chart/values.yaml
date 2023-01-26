@@ -24,7 +24,7 @@ customLabels: {}
 
 # clusterScoped is whether chaos-mesh should manage kubernetes cluster wide chaos
 # Also see rbac.create and controllerManager.serviceAccount
-clusterScoped: true
+clusterScoped: false
 
 # Creating rbac API Objects. Also see clusterScoped and controllerManager.serviceAccount
 rbac:
@@ -86,10 +86,10 @@ controllerManager:
     # METRICS_PORT is configured the port for chaos-controller-manager exposing prometheus metrics
     METRICS_PORT: 10080
   # If enabled, only pods in the namespace annotated with `"chaos-mesh.org/inject": "enabled"` could be injected
-  enableFilterNamespace: false
+  enableFilterNamespace: true
   # targetNamespace only works with clusterScoped is false(namespace scoped mode).
   # It means namespace which will be injected chaos
-  targetNamespace: chaos-mesh
+  targetNamespace: xatops
 
   service:
     # Kubernetes Service type for service chaos-controller-manager
