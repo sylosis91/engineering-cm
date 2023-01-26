@@ -14,7 +14,7 @@
 #
 
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   namespace: {{ .Release.Namespace | quote }}
   name: chaos-daemon
