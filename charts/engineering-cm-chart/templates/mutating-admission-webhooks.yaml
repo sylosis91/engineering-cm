@@ -27,7 +27,7 @@
 apiVersion: {{ $webhookApiVersion }}
 kind: MutatingWebhookConfiguration
 metadata:
-  name: {{ template "chaos-mesh.mutation" . }}
+  name: {{ .Release.Name }}-chaos-mutation
   labels:
     {{- include "chaos-mesh.labels" . | nindent 4 }}
     app.kubernetes.io/component: admission-webhook
