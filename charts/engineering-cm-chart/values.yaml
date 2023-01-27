@@ -426,8 +426,8 @@ webhook:
     - physicalmachine
     - statuscheck
     - remotecluster
-      #- awschaos
-      #- azurechaos
-      #- gcpchaos
-      #- dnschaos
-      #- kernelchaos
+    - awschaos
+    - azurechaos
+    - gcpchaos
+    - dnschaos
+    - kernelchaos
